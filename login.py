@@ -12,6 +12,9 @@ pyuic5 -x login.ui -o login.py
 '''
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import hashlib
+from PyQt5.QtGui import QPixmap
+from db_conn import dbConnection
 
 
 class Ui_FormLogin(object):
@@ -45,6 +48,7 @@ class Ui_FormLogin(object):
         self.verticalLayout.addWidget(self.label_2)
         self.passwort = QtWidgets.QLineEdit(FormLogin)
         self.passwort.setObjectName("passwort")
+        self.passwort.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout.addWidget(self.passwort)
         self.logmein = QtWidgets.QPushButton(FormLogin)
         self.logmein.setObjectName("logmein")
@@ -55,6 +59,8 @@ class Ui_FormLogin(object):
         self.retranslateUi(FormLogin)
         QtCore.QMetaObject.connectSlotsByName(FormLogin)
 
+        self.logmein.clicked.connect(self.key_loguj)
+
     def retranslateUi(self, FormLogin):
         _translate = QtCore.QCoreApplication.translate
         FormLogin.setWindowTitle(_translate("FormLogin", "Logowanie (rest in piss)"))
@@ -62,6 +68,16 @@ class Ui_FormLogin(object):
         self.label_2.setText(_translate("FormLogin", "Passwort"))
         self.logmein.setText(_translate("FormLogin", "rest in piss"))
 
+        pixmap = QPixmap('kys.jpg')
+        self.img.setPixmap(pixmap)
+
+    def key_loguj(self):
+        email = self.gmail.text()
+        passwort = hashlib.md5(self.passwort.text().encode('utf-8')).hexdigest()
+        # print(passwort)
+        db = dbConnection()
+        
+        
 
 if __name__ == "__main__":
     import sys
