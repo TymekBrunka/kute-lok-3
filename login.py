@@ -16,6 +16,7 @@ import hashlib
 from PyQt5.QtGui import QPixmap
 from db_conn import dbConnection
 from mess import messagebox
+from adresy import Ui_FormMainWindow
 
 
 class Ui_FormLogin(object):
@@ -71,6 +72,13 @@ class Ui_FormLogin(object):
 
         pixmap = QPixmap('kys.jpg')
         self.img.setPixmap(pixmap)
+    
+    def OpenWindow(self):
+        FormLogin.hide()
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_FormMainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def key_loguj(self):
         email = self.gmail.text()
@@ -88,6 +96,9 @@ class Ui_FormLogin(object):
         print(row)
         if len(row[0]) == 1:
             messagebox("Logged in", f"You are logged in as {email}", "Information", "Ok")
+            FormLogin.hide()
+            self.window = QtWidgets.QMainWindow()
+            self.OpenWindow()
         else:
             print("Problem?")
         
