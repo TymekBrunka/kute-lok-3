@@ -15,6 +15,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import hashlib
 from PyQt5.QtGui import QPixmap
 from db_conn import dbConnection
+from mess import messagebox
 
 
 class Ui_FormLogin(object):
@@ -74,9 +75,21 @@ class Ui_FormLogin(object):
     def key_loguj(self):
         email = self.gmail.text()
         passwort = hashlib.md5(self.passwort.text().encode('utf-8')).hexdigest()
-        # print(passwort)
+        print(passwort)
         db = dbConnection()
-        
+        db.connect()
+
+        query = """
+                select count(*) from users where email=%s and pass=%s
+                """
+        params = (email, passwort)
+        row = db.fetchone(query, params)
+        db.close()
+        print(row)
+        if len(row[0]) == 1:
+            messagebox("Logged in", f"You are logged in as {email}", "Information", "Ok")
+        else:
+            print("Problem?")
         
 
 if __name__ == "__main__":
